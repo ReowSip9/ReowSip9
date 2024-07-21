@@ -2,20 +2,20 @@
      Window.Set location("Ragnarok Landverse", "yes", "0", "0")
      //   System.Launch application("E:\เกี่ยวกับragnarok\PositionScreen.exe", "yes")
      Window.Set location("Position - xPangYa", "yes", "1715", "0")
-     // Settings
+     // ตั่งค่า
      // Change to 0 if you have no awakes or potion
      Variable.Set("IsAwakeAvailable", "0")
      Variable.Set("IsPotionAvailable", "1")
      // Potion to use when HP is 2/3
      Variable.Set("HowManyPotionToUse", "1")
-     Variable.Set("HowManyAttackAttempt", "5")
+     Variable.Set("HowManyAttackAttempt", "3")
      // Coordinates
-     Variable.Set("ShortCutBarY", "51")
+     // Variable.Set("ShortCutBarY", "51")
      // Variable.Set("FlyWingX", "270")
      // Variable.Set("PotionX", "256")
      // Variable.Set("Potion2X", "343")
      // Variable.Set("Potion3X", "372")
-     Variable.Set("AwakeningX", "299")
+     // Variable.Set("AwakeningX", "299")
      // Start a timer
      Macro.Start stopwatch("checkTime")
      Macro.Start stopwatch("checkLootTime")
@@ -24,7 +24,7 @@
      Variable.Add (Math)("IsNotValidMonster", "1")
      // Check Initialize every 31 minutes
      Variable.Set("MinutesToCheck", "1860000")
-     Variable.Set("MinutesToLoot", "10000")
+     Variable.Set("MinutesToLoot", "30000")
      // Start Up
      Function.Execute("Initialize")
      begin loop()
@@ -35,7 +35,7 @@
                end
           Function.Execute("Attack")
           Function.Execute("Loot4")
-          // Function.Execute("Fly")
+          Function.Execute("Fly")
           Function.Execute("IfNeedToPotion")
      end
  end
@@ -53,20 +53,19 @@ function
 
 function("Attack")
      begin
-          // Teleport if Monster to avoid is found
-          Function.Execute("Loot4")
           Function.Execute("EmergencyFlyWing")
+          Function.Execute("IfNeedToPotion")
+          Function.Execute("Loot4")
           // Click Monster if Located
           if  Color.Can be located on screen (RGB)("85", "255", "0", "0")
                begin
                     Mouse.Click at color closest to coordinate (RGB)("85", "255", "0", "0", "960", "540", "left")
-                    // 997 43
-                    // Mouse.Move to coordinate("270", "40")
+                    //  Mouse.Move to coordinate("683", "412")
                     // Teleport if clicking on the monster a number of times but still the name isn't shown
                     if  Color.Pixel pattern can not be located on screen("227,164,196,0,-1,227,164,196,0,2,227,164,196", "4")
                          begin
                               Variable.Add (Math)("IsNotValidMonster", "1")
-                              Macro.Pause("500")
+                              Macro.Pause("250")
                               if  Variable.Is greater than (Math)("IsNotValidMonster", "{HowManyAttackAttempt}")
                                    begin
                                         Variable.Set("IsNotValidMonster", "1")
@@ -78,12 +77,11 @@ function("Attack")
                          begin loop()
                               Macro.Get parent loop iteration("count")
                               Variable.Set("x", "{count}")
-                              if  Variable.Is equal to("x","30")
+                              if  Variable.Is equal to("x","18")
                                    begin
                                         Function.Execute("FlyWithoutCondition")
                                    end
                               Macro.Pause("300")
-                              Function.Execute("IfNeedToPotion")
                               // Teleport if Monster to avoid is found
                               Function.Execute("EmergencyFlyWing")
                               // Mouse.Move to coordinate("270", "40")
@@ -144,6 +142,7 @@ function("Fly")
      begin
           // Teleport if Monster to avoid is found
           Function.Execute("EmergencyFlyWing")
+          Function.Execute("Loot4")
           if  Color.Can not be located on screen (RGB)("85", "255", "0", "0")
                begin
                     if  Color.Can not be located on screen (RGB)("85", "255", "0", "0")
@@ -156,7 +155,7 @@ function
 
 function("EmergencyFlyWing")
      begin
-          if  Color.Can be located on screen (RGB)("255", "181", "82", "0")
+          if  Color.Can be located on screen (RGB)("255", "132", "66", "0")
                begin
                     Function.Execute("FlyWithoutCondition")
                end
@@ -167,6 +166,8 @@ function("FlyWithoutCondition")
      begin
           //  Mouse.Double click at coordinate("{FlyWingX}","{ShortCutBarY}","left")
           Keyboard.Press key("{<f2>}")
+          Macro.Pause("500")
+          Keyboard.Press key("{<enter>}")
           Macro.Pause("1000")
      end
 function
@@ -225,7 +226,8 @@ function("Potion")
           Function.Execute("EmergencyFlyWing")
           // Mouse.Double click at coordinate("{PotionX}", "{ShortCutBarY}", "left")
           Keyboard.Press key("{<f1>}")
-          Macro.Pause("150")
+          Macro.Pause("100")
+          Mouse.Click at coordinate("684", "409", "left")
      end
 function
 
@@ -235,7 +237,7 @@ function("Potion2")
           Function.Execute("EmergencyFlyWing")
           // Mouse.Double click at coordinate("{Potion2X}", "{ShortCutBarY}", "left")
           Keyboard.Press key("{<f4>}")
-          Macro.Pause("300")
+          Macro.Pause("150")
      end
 function
 
@@ -245,7 +247,7 @@ function("Potion3")
           Function.Execute("EmergencyFlyWing")
           // Mouse.Double click at coordinate("{Potion3X}", "{ShortCutBarY}", "left")
           Keyboard.Press key("{<f5>}")
-          Macro.Pause("300")
+          Macro.Pause("150")
      end
 function
  
